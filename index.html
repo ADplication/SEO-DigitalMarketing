@@ -1,0 +1,1379 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+
+    <title>SEO Dream - ADplication</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="bootstrap.min.css" rel="stylesheet">
+
+
+    <!-- Additional CSS Files -->
+    <link rel="stylesheet" href="fontawesome.css">
+    <link rel="stylesheet" href="templatemo-seo-dream.css">
+    <link rel="stylesheet" href="animated.css">
+    <link rel="stylesheet" href="owl.css">
+    <style>
+        .testimonials {
+            position: relative;
+        }
+
+        .testimonials__slide {
+            display: none; /* Hide all slides by default */
+        }
+
+            .testimonials__slide:first-child {
+                display: block; /* Show the first slide */
+            }
+
+        .testimonials__avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            margin-top: 10px;
+        }
+
+        .testimonials__info {
+            margin-top: 10px;
+        }
+
+        .testimonial-buttons button {
+            margin: 0 10px;
+        }
+    </style>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const monthDropdown = document.getElementById('month');
+            const subcategoryDropdown = document.getElementById('subcategory');
+            const form = document.getElementById('benchmarkForm');
+            const submitButton = form.querySelector('button[type="submit"]');
+            const results = document.getElementById('results');
+            const subcategoryHeading = document.getElementById('subcategoryHeading');
+            const cpc = document.getElementById('cpc');
+            const roas = document.getElementById('roas');
+
+            const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+            const monthFiles = {
+                'Jan': 'Category_Benchmarks_Jan_2024.json',
+                'Feb': 'Category_Benchmarks_Feb_2024.json',
+                'Mar': 'Category_Benchmarks_Mar_2023.json',
+                'Apr': 'Category_Benchmarks_Apr_2023 (1).json',
+                'May': 'Category_Benchmarks_May_2023.json',
+                'Jun': 'Category_Benchmarks_Jun_2023.json',
+                'Jul': 'Category_Benchmarks_Jul_2023.json',
+                'Aug': 'Category_Benchmarks_Aug_2023.json',
+                'Sep': 'Category_Benchmarks_Sep_2023.json',
+                'Oct': 'Category_Benchmarks_Oct_2023.json',
+                'Nov': 'Category_Benchmarks_Nov_2023.json',
+                'Dec': 'Category_Benchmarks_Dec_2023.json'
+            };
+
+            // Populate the month dropdown
+            months.forEach(month => {
+                const option = document.createElement('option');
+                option.value = month;
+                option.textContent = month;
+                monthDropdown.appendChild(option);
+            });
+
+            // Load subcategories when a month is selected
+            monthDropdown.addEventListener('change', () => {
+                const selectedMonth = monthDropdown.value;
+                const file = monthFiles[selectedMonth];
+
+                console.log(`Selected month: ${selectedMonth}, file: ${file}`);
+
+                subcategoryDropdown.innerHTML = '<option value="" disabled selected>Select Subcategory</option>'; // Clear previous options and add "Select Subcategory"
+
+                if (file) {
+                    fetch(file)
+                        .then(response => response.json())
+                        .then(data => {
+                            console.log('Fetched data:', data);
+
+                            data.SP.forEach(subcategory => {
+                                const option = document.createElement('option');
+                                option.value = subcategory['Subcategory Name'];
+                                option.textContent = subcategory['Subcategory Name'];
+                                subcategoryDropdown.appendChild(option);
+                            });
+                            subcategoryDropdown.disabled = false;
+                            submitButton.disabled = false;
+                        })
+                        .catch(error => {
+                            console.error('Error fetching subcategories:', error);
+                            subcategoryDropdown.disabled = true;
+                            submitButton.disabled = true;
+                        });
+                } else {
+                    subcategoryDropdown.disabled = true;
+                    submitButton.disabled = true;
+                }
+            });
+
+            // Display subcategory data on form submit
+            form.addEventListener('submit', event => {
+                event.preventDefault();
+
+                const selectedMonth = monthDropdown.value;
+                const selectedSubcategory = subcategoryDropdown.value;
+                const file = monthFiles[selectedMonth];
+
+                console.log(`Submitting form with month: ${selectedMonth}, subcategory: ${selectedSubcategory}`);
+
+                if (file) {
+                    fetch(file)
+                        .then(response => response.json())
+                        .then(data => {
+                            console.log('Fetched data on submit:', data);
+
+                            const subcategoryData = data.SP.find(item => item['Subcategory Name'] === selectedSubcategory);
+
+                            console.log('Subcategory data:', subcategoryData);
+
+                            if (subcategoryData) {
+                                console.log(subcategoryData.ROAS)
+                                subcategoryHeading.textContent = selectedSubcategory;
+                                cpc.textContent = `CPC: ${parseFloat(subcategoryData.CPC).toFixed(1)}`;
+                                roas.textContent = `ROAS: ${parseFloat(subcategoryData.ROAS).toFixed(1)}`;
+                                results.style.display = 'block';
+                            } else {
+
+                                console.error('No subcategory data found');
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error fetching subcategory data:', error);
+                        });
+                } else {
+                    console.error('File not found');
+                }
+            });
+
+            // Trigger change event to reset the subcategory dropdown
+            monthDropdown.dispatchEvent(new Event('change'));
+        });
+
+
+
+
+
+
+
+
+    </script>
+   
+
+
+
+</head>
+
+<body>
+
+    <!-- ***** Preloader Start ***** -->
+    <div id="js-preloader" class="js-preloader">
+        <div class="preloader-inner">
+            <span class="dot"></span>
+            <div class="dots">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </div>
+    <!-- ***** Preloader End ***** -->
+    <!-- ***** Header Area Start ***** -->
+    <header class="header-area header-sticky wow slideInDown" data-wow-duration="0.75s" data-wow-delay="0s">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <nav class="main-nav">
+                        <!-- ***** Logo Start ***** -->
+                        <a href="index.html" class="logo">
+                            <h4>ADplication<img src="logo-icon.png" alt=""></h4>
+                        </a>
+                        <!-- ***** Logo End ***** -->
+                        <!-- ***** Menu Start ***** -->
+                        <ul class="nav">
+                            <li class="scroll-to-section"><a href="#top" class="active">Home</a></li>
+                            <li class="scroll-to-section"><a href="#features">Features</a></li>
+                            <li class="scroll-to-section"><a href="#about">About Us</a></li>
+                            <li class="scroll-to-section"><a href="#services">Services</a></li>
+                            <li class="scroll-to-section"><a href="#portfolio">Portfolio</a></li>
+                            <li class="scroll-to-section"><a href="#contact">Contact Us</a></li>
+                            <li class="scroll-to-section"><div class="main-blue-button"><a href="#Quick">Get Your Quote</a></div></li>
+                        </ul>
+                        <a class='menu-trigger'>
+                            <span>Menu</span>
+                        </a>
+                        <!-- ***** Menu End ***** -->
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </header>
+    <!-- ***** Header Area End ***** -->
+
+    <div class="main-banner wow fadeIn" id="top" data-wow-duration="1s" data-wow-delay="0.5s">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="row">
+                        <div class="col-lg-6 align-self-center">
+                            <div class="left-content header-text wow fadeInLeft" data-wow-duration="1s" data-wow-delay="1s">
+                                <div class="row">
+                                    <div class="col-lg-4 col-sm-4">
+                                        <div class="info-stat">
+                                            <h6>Agency Status:</h6>
+                                            <h4>Ready Work</h4>
+                                        </div>
+                                    </div>
+                                    <!--<div class="col-lg-4 col-sm-4">
+                                      <div class="info-stat">
+                                        <h6>Price:</h6>
+                                        <h4>$720/Month</h4>
+                                      </div>
+                                    </div>
+                                    <div class="col-lg-4 col-sm-4">
+                                      <div class="info-stat">
+                                        <h6>Schedules</h6>
+                                        <h4>$450/Meeting</h4>
+                                      </div>
+                                    </div>-->
+                                    <div class="col-lg-12">
+                                        <h2>SEO &amp; Digital Marketing Agency</h2>
+                                    </div>
+                                    <div class="col-lg-12">
+                                        <div class="main-green-button scroll-to-section">
+                                            <a href="#contact">Quick Find Prizing click here</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="right-image wow fadeInRight" data-wow-duration="1s" data-wow-delay="0.5s">
+                                <img src="banner-right-image.png" alt="">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <section id="Quick" class="about-us section bg-primary">
+        <br />
+        <br />
+        <div class="container ">
+            <div class="card row mt-5 bg-danger">
+                <div class="col-md-12 mx-auto d-flex">
+                    <!-- Left Side: Form -->
+                    <div class="card-body col-md-5 mt-2 bg-white rounded-pill p-4">
+                        <h4 class="card-title about-item">Expected Category Return</h4>
+                        <h6 class="about-item">To check your category performance (ROAS) on Amazon.</h6>
+                        <br />
+                        <form id="benchmarkForm">
+                            <div class="form-group">
+                                <label for="month">Month:</label>
+                                <select class="form-control" id="month" name="month">
+                                    <option value="" disabled selected>Select Month</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="subcategory">Subcategory:</label>
+                                <select class="form-control" id="subcategory" name="subcategory" disabled>
+                                    <option value="" disabled selected>Select Subcategory</option>
+                                </select>
+                            </div>
+                            <br />
+                            <button type="submit" class="btn btn-danger" disabled>Submit</button>
+                        </form>
+                    </div>
+                    <div class="col-md-1">
+                        &nbsp;
+                    </div>
+                    <!-- Right Side: Results -->
+                    <div class="card-body col-md-5 mt-2 bg-white rounded-pill p-4">
+                        <div id="results" style="display: none;">
+                            <h4 class="card-title text-center about-item" id="subcategoryHeading">Category:</h4>
+                            <hr />
+                            <div class="col-12 d-flex justify-content-between">
+                                <div class="result-item about-item">
+                                    <h4 id="cpc"></h4>
+                                    <h6>Cost Per Click</h6>
+                                </div>
+                                <div class="result-item about-item">
+                                    <h4 id="roas"></h4>
+                                    <h6>Return on Ad Spend</h6>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <br />
+            </div>
+
+        </div>
+
+        <br />
+
+        <style>
+            .card-body {
+                padding: 2rem; /* Adjust the padding as needed */
+                border-radius: 50px; /* Adjust the border radius to get the pill effect */
+            }
+
+            .rounded-pill {
+                border-radius: 50px !important; /* Ensure border-radius is applied */
+            }
+
+            #results {
+                padding: 1rem; /* Add padding for better spacing */
+            }
+
+            .card-title {
+                margin-bottom: 1rem; /* Add some margin below the title */
+            }
+
+            #results .col-12.d-flex {
+                justify-content: space-between; /* Distribute space evenly between the divs */
+            }
+
+            .result-item {
+                flex: 1;
+                text-align: center;
+                margin: 0 1rem; /* Add horizontal margin between the result items */
+            }
+
+            #results .result-item:first-child {
+                margin-left: 0; /* Remove left margin for the first item */
+            }
+
+            #results .result-item:last-child {
+                margin-right: 0; /* Remove right margin for the last item */
+            }
+        </style>
+
+    </section>
+    <section id="clients" class="s-clients">
+        <div class="container-fluid wow fadeIn" data-wow-duration="1s" data-wow-delay="0.7s">
+            <div class="row section-header m-5" data-aos="fade-up">
+                <div class="col-full">
+                    <h3 class="subhead">Our Clients</h3>
+                    <h1 class="display-6">
+                        ADplication has been honored to
+                        partner up with these clients
+                    </h1>
+                </div>
+            </div> <!-- end section-header -->
+
+            <div class="row clients-outer" data-aos="fade-up">
+                <div class="col-lg-12">
+                    <div class="owl-carousel loop">
+                        <div class="clients__slide">
+                            <img src="Godrej.jpeg" alt="Godrej" title="Godrej" class="clients__img">
+                        </div>
+                        <div class="clients__slide">
+                            <img src="OIP.jpeg" alt="Wipro" title="Wipro" class="clients__img">
+                        </div>
+                        <div class="clients__slide">
+                            <img src="healthAid.png" alt="HealthAid" title="HealthAid" class="clients__img">
+                        </div>
+                        <div class="clients__slide">
+                            <img src="himalaya-removebg-preview.png" alt="Himalaya" title="Himalaya" class="clients__img">
+                        </div>
+                        <div class="clients__slide">
+                            <img src="hyuman.jpeg" alt="Hyuman" title="Hyuman" class="clients__img">
+                        </div>
+                        <div class="clients__slide">
+                            <img src="Dr.reddy.jpeg" alt="Dr.reddy" title="Dr.reddy" class="clients__img">
+                        </div>
+                        <div class="clients__slide">
+                            <img src="Absorbia.png" alt="Absorbia" title="Absorbia" class="clients__img">
+                        </div>
+                    </div> <!-- end owl-carousel -->
+                </div> <!-- end col-lg-12 -->
+            </div> <!-- end clients-outer -->
+        </div> <!-- end container-fluid -->
+        <style>
+            .s-clients {
+                padding: 50px 0;
+                background-color: #f9f9f9;
+            }
+
+            .section-header {
+                margin-bottom: 30px;
+                text-align: center;
+            }
+
+            .subhead {
+                font-size: 1.5rem;
+                color: #333;
+            }
+
+            .display-2 {
+                font-size: 2.5rem;
+                color: #333;
+            }
+
+            .clients-outer {
+                text-align: center;
+            }
+
+            .clients__slide {
+                display: inline-block;
+                margin: 0 15px;
+            }
+
+            .clients__img {
+                max-width: 100px;
+                margin: 10px;
+                transition: transform 0.3s;
+            }
+
+                .clients__img:hover {
+                    transform: scale(1.1);
+                }
+
+            /* Owl Carousel overrides */
+            .owl-carousel .owl-item {
+                display: inline-block;
+            }
+        </style>
+    </section> <!-- end s-clients -->
+
+    <section class="about-us section bg-secondary text-white p-5" id="testimonials-section">
+        <div class="row clients-testimonials animate" data-aos="fade-up">
+            <div class="bg-success col-12 " style="border-radius:10%">
+                <h4 class="col-full about-item mt-3" style="text-align: center;">Testimonials</h4>
+                <hr />
+                <div class="testimonials" id="testimonialCarousel" style="margin:2%">
+                    <div class="testimonials__slide px-5 py-1 pb-2 text-white">
+                        <p class="text-white">Having been through a number of digital marketing agencies I was sceptical about employing another, but I have to say Ad-Plication are a breath of fresh air. Within 3 months we saw a complete turnaround in our Amazon and Flipkart marketing performance. These guys really life and breath digital and think outside the box when it comes to campaigns and report on everything. Would highly recommend.</p>
+                        <div style="text-align: left;">
+                            <img src="divya.jpeg" alt="Author image" class="testimonials__avatar">
+                        </div>
+                        <div class="testimonials__info pb-2">
+                            <span class="testimonials__name">Divya</span>
+                            <span class="testimonials__pos">Brand Owner, HealthAid</span>
+                        </div>
+                    </div>
+                    <div class="testimonials__slide px-5 py-1 pb-2 text-white">
+                        <p class="text-white">Straight talking and clear outcomes. Wouldn't go anywhere else for my digital marketing support. If your product wants an organic growth through Keyword targeting, these are your guys.</p>
+                        <img src="user-05.jpg" alt="Author image" class="testimonials__avatar">
+                        <div class="testimonials__info pb-2">
+                            <span class="testimonials__name">Anup</span>
+                            <span class="testimonials__pos">Brand Manager, dthlivetv.com</span>
+                        </div>
+                    </div>
+                    <div class="testimonials__slide px-5 py-1 pb-2 text-white">
+                        <p class="text-white">Being a small business it's important for us that we keep control of our marketing spend and get maximum return on investment. Ad-plication understands this need perfectly and has put together a successful social media and AMS campaign that has exceeded my expectations and met the brief perfectly. Ad-plication continues to manage my online marketing, and I don't hesitate to recommend them.</p>
+                        <img src="bhavana.jpeg" alt="Author image" class="testimonials__avatar">
+                        <div class="testimonials__info pb-2">
+                            <span class="testimonials__name">Bhavana</span>
+                            <span class="testimonials__pos">Brand Owner, PahariRoots</span>
+                        </div>
+                    </div>
+                </div><!-- end testimonials -->
+                <!-- Arrow Buttons -->
+                <div class="testimonial-buttons pb-2" style="text-align: center; margin-top: 20px;">
+                    <button class="btn btn-primary" onclick="prevSlide()">&#9664; Previous</button>
+                    <button class="btn btn-primary" onclick="nextSlide()">Next &#9654;</button>
+                </div>
+            </div><!-- end col-full -->
+            <script>
+                let currentSlide = 0;
+                const slides = document.querySelectorAll('.testimonials__slide');
+                const totalSlides = slides.length;
+
+                function showSlide(index) {
+                    slides.forEach((slide, i) => {
+                        slide.style.display = i === index ? 'block' : 'none';
+                    });
+                }
+
+                function nextSlide() {
+                    currentSlide = (currentSlide + 1) % totalSlides;
+                    showSlide(currentSlide);
+                }
+
+                function prevSlide() {
+                    currentSlide = (currentSlide - 1 + totalSlides) % totalSlides;
+                    showSlide(currentSlide);
+                }
+
+                // Initialize the first slide
+                showSlide(currentSlide);
+            </script>
+
+
+            <style>
+                .animate {
+                    opacity: 0;
+                    transform: translateX(-100%);
+                    transition: transform 2s ease-out 2s, opacity 2s ease-out 2s;
+                }
+
+                .animate-in {
+                    opacity: 1;
+                    transform: translateX(0);
+                }
+
+                .clients-testimonials.animate-in {
+                    opacity: 1;
+                    transform: translateX(0);
+                }
+
+                .clients-testimonials {
+                    opacity: 0;
+                    transform: translateX(-100%);
+                    transition: transform 2s ease-out, opacity 2s ease-out;
+                }
+
+                    .clients-testimonials.in-view {
+                        opacity: 1;
+                        transform: translateX(0);
+                    }
+            </style>
+            <script>
+                // Function to add animation class when section is in view
+                function animateOnScroll() {
+                    const section = document.getElementById('testimonials-section');
+                    const rect = section.getBoundingClientRect();
+                    if (rect.top < window.innerHeight) {
+                        section.querySelector('.clients-testimonials').classList.add('in-view');
+                        window.removeEventListener('scroll', animateOnScroll);
+                    }
+                }
+
+                window.addEventListener('scroll', animateOnScroll);
+
+                // Trigger the scroll function initially in case the section is already in view
+                animateOnScroll();
+            </script>
+
+            <script>
+                let currentSlide = 0;
+                const slides = document.querySelectorAll('.testimonials__slide');
+                const totalSlides = slides.length;
+
+                function showSlide(index) {
+                    slides.forEach((slide, i) => {
+                        slide.style.display = i === index ? 'block' : 'none';
+                    });
+                }
+
+                function nextSlide() {
+                    currentSlide = (currentSlide + 1) % totalSlides;
+                    showSlide(currentSlide);
+                }
+
+                function prevSlide() {
+                    currentSlide = (currentSlide - 1 + totalSlides) % totalSlides;
+                    showSlide(currentSlide);
+                }
+
+                // Initialize the first slide
+                showSlide(currentSlide);
+
+            </script>
+        </div>
+    </section>
+    <div id="features" class="features section">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="features-content">
+                        <div class="row">
+                            <div class="col-lg-3">
+                                <div class="features-item first-feature wow fadeInUp" data-wow-duration="1s" data-wow-delay="0s">
+                                    <div class="first-number number">
+                                        <h6>01</h6>
+                                    </div>
+                                    <div class="icon"></div>
+                                    <h4>Digital Shelf Management</h4>
+                                    <div class="line-dec"></div>
+                                    <p>Leverage big data to distil timely actionable insights and scale e-marketplace growth with predictable consistency.</p>
+                                </div>
+                            </div>
+                            <div class="col-lg-3">
+                                <div class="features-item second-feature wow fadeInUp" data-wow-duration="1s" data-wow-delay="0.2s">
+                                    <div class="second-number number">
+                                        <h6>02</h6>
+                                    </div>
+                                    <div class="icon"></div>
+                                    <h4>Consumer Insights</h4>
+                                    <div class="line-dec"></div>
+                                    <p>Decode consumer intent & purchase drivers and explore category trends & opportunities.</p>
+                                </div>
+                            </div>
+                            <div class="col-lg-3">
+                                <div class="features-item first-feature wow fadeInUp" data-wow-duration="1s" data-wow-delay="0.4s">
+                                    <div class="third-number number">
+                                        <h6>03</h6>
+                                    </div>
+                                    <div class="icon"></div>
+                                    <h4>Media Optimization & Automation</h4>
+                                    <div class="line-dec"></div>
+                                    <!--<p>If this template is useful for your website, please consider to <a rel="nofollow" href="https://www.paypal.me/templatemo" target="_blank">support us</a> a little.</p>-->
+                                    <p>Maximize the impact of your marketing spends, powered by category, competitive, and digital shelf intelligence.</p>
+                                </div>
+                            </div>
+                            <div class="col-lg-3">
+                                <div class="features-item second-feature last-features-item wow fadeInUp" data-wow-duration="1s" data-wow-delay="0.6s">
+                                    <div class="fourth-number number">
+                                        <h6>04</h6>
+                                    </div>
+                                    <div class="icon"></div>
+                                    <h4>Data-as-a-Service</h4>
+                                    <div class="line-dec"></div>
+                                    <p>Leverage the power of big data with our curated, enriched, consistent, and reliable most up to date 1P and 3P marketplace data integrated into your data lake.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-12">
+                    <div class="skills-content">
+                        <div class="row">
+                            <div class="col-lg-3">
+                                <div class="skill-item wow fadeIn" data-wow-duration="1s" data-wow-delay="0s">
+                                    <div class="progress" data-percentage="90">
+                                        <span class="progress-left">
+                                            <span class="progress-bar"></span>
+                                        </span>
+                                        <span class="progress-right">
+                                            <span class="progress-bar"></span>
+                                        </span>
+                                        <div class="progress-value">
+                                            <div>
+                                                2500+<br>
+                                                <span>Campaign's Launch</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-3">
+                                <div class="skill-item wow fadeIn" data-wow-duration="1s" data-wow-delay="0.2s">
+                                    <div class="progress" data-percentage="10">
+                                        <span class="progress-left">
+                                            <span class="progress-bar"></span>
+                                        </span>
+                                        <span class="progress-right">
+                                            <span class="progress-bar"></span>
+                                        </span>
+                                        <div class="progress-value">
+                                            <div>
+                                                42<br>
+                                                <span>Projects Completed</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-3">
+                                <div class="skill-item wow fadeIn" data-wow-duration="1s" data-wow-delay="0.4s">
+                                    <div class="progress" data-percentage="20">
+                                        <span class="progress-left">
+                                            <span class="progress-bar"></span>
+                                        </span>
+                                        <span class="progress-right">
+                                            <span class="progress-bar"></span>
+                                        </span>
+                                        <div class="progress-value">
+                                            <div>
+                                                7<br>
+                                                <span>Happy Clients</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-3">
+                                <div class="skill-item last-skill-item wow fadeIn" data-wow-duration="1s" data-wow-delay="0.6s">
+                                    <div class="progress" data-percentage="100">
+                                        <span class="progress-left">
+                                            <span class="progress-bar"></span>
+                                        </span>
+                                        <span class="progress-right">
+                                            <span class="progress-bar"></span>
+                                        </span>
+                                        <div class="progress-value">
+                                            <div>
+                                                <img src="Amazon-Advisory.webp" /><br>
+                                                <span>Awards Received</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="about" class="about-us section">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="left-image wow fadeInLeft" data-wow-duration="1s" data-wow-delay="0.5s">
+                        <img src="about-left-image.png" alt="">
+                    </div>
+                </div>
+                <div class="col-lg-6 align-self-center wow fadeInRight" data-wow-duration="1s" data-wow-delay="0.5s">
+                    <div class="section-heading">
+                        <h6>About Us</h6>
+                        <h2>ADplication <em>marketing</em> agency &amp; Make your growth at High peak<span>with us</span></h2>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-3 col-sm-3">
+                            <div class="about-item">
+                                <h4>2500+</h4>
+                                <h6>Campaign's Launch</h6>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-sm-3">
+                            <div class="about-item">
+                                <h4>42+</h4>
+                                <h6>projects finished</h6>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-sm-3">
+                            <div class="about-item">
+                                <h4>7+</h4>
+                                <h6>happy clients</h6>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-sm-3">
+                            <div class="about-item">
+                                <h4><img src="~/Amazon-Advisory.webp" /></h4>
+                                <h6>awards</h6>
+                            </div>
+                        </div>
+                    </div>
+                    <p><a rel="nofollow" href="https://templatemo.com/tm-563-seo-dream" target="_parent">ADplication</a> is your expert partner for elevating your brand on E-Commerce (speciality Amazon). With over 9 years of experience, we use data to increase your sales and visibility. Our customized plans are built to make your brand shine in the competitive E-Commerce space. We've helped many brands grow, and we're ready to simplify the process for you. At ADplication, we take on the complexities of the platform, allowing you to focus on your core business. Let's work together to take your E-Commerce journey to the next level. You may contact us for more information. Thank you.</p>
+                    <div class="main-green-button"><a href="#">Discover company</a></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="services" class="our-services section">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-6 offset-lg-3">
+                    <div class="section-heading wow bounceIn" data-wow-duration="1s" data-wow-delay="0.2s">
+                        <h6>Our Services</h6>
+                        <h2>Discover What We Do &amp; <span>Offer</span> To Our <em>Clients</em></h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-4">
+                    <div class="service-item wow bounceInUp" data-wow-duration="1s" data-wow-delay="0.3s">
+                        <div class="row">
+                            <div class="col-lg-4">
+                                <div class="icon">
+                                    <img src="service-icon-01.png" alt="">
+                                </div>
+                            </div>
+                            <div class="col-lg-8">
+                                <div class="right-content">
+                                    <h4>SEO</h4>
+                                    <p>Increase your visibility with our expert SEO. We tackle online search ranking challenges to ensure your products stand out.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="service-item wow bounceInUp" data-wow-duration="1s" data-wow-delay="0.4s">
+                        <div class="row">
+                            <div class="col-lg-4">
+                                <div class="icon">
+                                    <img src="service-icon-02.png" alt="">
+                                </div>
+                            </div>
+                            <div class="col-lg-8">
+                                <div class="right-content">
+                                    <h4>ADVERTISING MANAGEMENT</h4>
+                                    <p>Boost your growth with our effective and affordable PPC service.Expect higher profis, lower ACOS, and clear ad management.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="service-item wow bounceInUp" data-wow-duration="1s" data-wow-delay="0.5s">
+                        <div class="row">
+                            <div class="col-lg-4">
+                                <div class="icon">
+                                    <img src="service-icon-03.png" alt="">
+                                </div>
+                            </div>
+                            <div class="col-lg-8">
+                                <div class="right-content">
+                                    <h4>ACCOUNT MANAGEMENT</h4>
+                                    <p>Streamline your operations with our full account management, freeing up your time, reducing stress, and ensuring peace of mind.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="service-item wow bounceInUp" data-wow-duration="1s" data-wow-delay="0.6s">
+                        <div class="row">
+                            <div class="col-lg-4">
+                                <div class="icon">
+                                    <img src="service-icon-03.png" alt="">
+                                </div>
+                            </div>
+                            <div class="col-lg-8">
+                                <div class="right-content">
+                                    <h4>LISTING CREATION</h4>
+                                    <p>Improve your sales with better listings. We assist in creating them by analyzing recent trends and aligning with your brand theme for engaging and high-converting listings.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="service-item wow bounceInUp" data-wow-duration="1s" data-wow-delay="0.7s">
+                        <div class="row">
+                            <div class="col-lg-4">
+                                <div class="icon">
+                                    <img src="service-icon-01.png" alt="">
+                                </div>
+                            </div>
+                            <div class="col-lg-8">
+                                <div class="right-content">
+                                    <h4>PRODUCT LAUNCH</h4>
+                                    <p>Launch your Procts on multiple E-Commerce platform with our help for higher sales and success. We use SEO, PPC, design, and Optimization for impactful launches.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="service-item wow bounceInUp" data-wow-duration="1s" data-wow-delay="0.8s">
+                        <div class="row">
+                            <div class="col-lg-4">
+                                <div class="icon">
+                                    <img src="service-icon-02.png" alt="">
+                                </div>
+                            </div>
+                            <div class="col-lg-8">
+                                <div class="right-content">
+                                    <h4>BRAND STORE DEVELOPMENT</h4>
+                                    <p>Build a stronger brand presence with compelling content and visuals. Our optimized brand stores aim to boost customer conversions.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="service-item wow bounceInUp" data-wow-duration="1s" data-wow-delay="0.8s">
+                        <div class="row">
+                            <div class="col-lg-4">
+                                <div class="icon">
+                                    <img src="service-icon-02.png" alt="">
+                                </div>
+                            </div>
+                            <div class="col-lg-8">
+                                <div class="right-content">
+                                    <h4>CATALOG TROUBLE SHOOTING</h4>
+                                    <p>Solve any cataloging issues with our experts support, making catalog management hassle-free</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="service-item wow bounceInUp" data-wow-duration="1s" data-wow-delay="0.8s">
+                        <div class="row">
+                            <div class="col-lg-4">
+                                <div class="icon">
+                                    <img src="service-icon-02.png" alt="">
+                                </div>
+                            </div>
+                            <div class="col-lg-8">
+                                <div class="right-content">
+                                    <h4>A+ LISTING CREATION</h4>
+                                    <p>Attract and convert more customers with high-quality A+ content, designed and optimized for the best conversion rates.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <section id='works' class="s-works">
+        <div class="intro-wrap" style="margin-top:-15px;">
+            <div class="row section-header" data-aos="fade-up" style="margin-left:15px;margin-right:15px;">
+                <div class="col-full" style="margin-top:-20px">
+                    <h3 class="subhead" style="color:black">Recent Works</h3>
+                    <hr />
+                    <h1 class="display-2 display-2--light" style="color:black">We love what we do, check out some of our latest works</h1>
+                </div>
+            </div> <!-- end section-header -->
+        </div> <!-- end intro-wrap -->
+
+        <div class="row works-content">
+            <div class="col-full">
+
+                <!-- Project 1 -->
+                <!-- end row masonry__brick -->
+                <!-- Project 2 -->
+                <div class="row masonry__brick project-margin" data-aos="fade-up">
+                    <div class="col-md-2"></div>
+
+                    <div class="col-md-8">
+                        <div class="item-folio">
+                            <div class="item-folio__thumb">
+                                <a href="WhatsApp Image 2024-04-16 at 15.45.52_441eb724.jpg" class="thumb-link" title="Google Ads Dashboard" data-size="1050x700">
+                                    <img src="WhatsApp Image 2024-04-16 at 15.45.52_441eb724.jpg"
+                                         srcset="WhatsApp Image 2024-04-16 at 15.45.52_441eb724.jpg 1x, WhatsApp Image 2024-04-16 at 15.45.52_441eb724@2x.jpg 2x" alt="Google Ads Dashboard">
+                                </a>
+                            </div>
+                            <div class="item-folio__text">
+                                <h3 class="item-folio__title">Google Ads</h3>
+                                <p class="item-folio__cat">Google Ads Dashboard</p>
+                            </div>
+                            <a href="#" class="item-folio__project-link" title="Project link">
+                                <i class="icon-link"></i>
+                            </a>
+                            <div class="item-folio__caption">
+                                <p>Getting a glimpse of what we can offer our clients on Google Ads and how we can perform holistic development of the brand.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-2"></div>
+
+                </div> <!-- end row masonry__brick -->
+                <!-- Project 3 -->
+                <div class="row masonry__brick project-margin" data-aos="fade-up">
+                    <div class="col-md-2"></div>
+
+                    <div class="col-md-8">
+                        <div class="item-folio">
+                            <div class="item-folio__thumb">
+                                <a href="WhatsApp Image 2024-04-16 at 15.47.01_d12e8a78.jpg" class="thumb-link" title="Amazon-Dashboard" data-size="1050x700">
+                                    <img src="WhatsApp Image 2024-04-16 at 15.47.01_d12e8a78.jpg"
+                                         srcset="WhatsApp Image 2024-04-16 at 15.47.01_d12e8a78.jpg 1x, WhatsApp Image 2024-04-16 at 15.47.01_d12e8a78@2x.jpg 2x" alt="Amazon Dashboard">
+                                </a>
+                            </div>
+                            <div class="item-folio__text">
+                                <h3 class="item-folio__title">Amazon Ads</h3>
+                                <p class="item-folio__cat">Amazon Ads Dashboard</p>
+                            </div>
+                            <a href="#" class="item-folio__project-link" title="Project link">
+                                <i class="icon-link"></i>
+                            </a>
+                            <div class="item-folio__caption">
+                                <p>Getting a glimpse of what we can offer to our clients on Amazon Ads and how we can perform 360-degree development of the brand through multiple channels.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-2"></div>
+
+                </div> <!-- end row masonry__brick -->
+                <div class="row masonry__brick project-margin" data-aos="fade-up">
+                    <div class="col-md-2"></div>
+                    <div class="col-md-8">
+                        <div class="item-folio">
+                            <div class="item-folio__thumb">
+                                <a href="WhatsApp Image 2024-04-16 at 15.44.27_83531b49.jpg" class="thumb-link" title="Flipkart Marketing Dashboard" data-size="1050x700">
+                                    <img src="WhatsApp Image 2024-04-16 at 15.44.27_83531b49.jpg"
+                                         srcset="WhatsApp Image 2024-04-16 at 15.44.27_83531b49.jpg 1x, WhatsApp Image 2024-04-16 at 15.44.27_83531b49@2x.jpg 2x" alt="Flipkart Dashboard">
+                                </a>
+                            </div>
+                            <div class="item-folio__text">
+                                <h3 class="item-folio__title">Flipkart</h3>
+                                <p class="item-folio__cat">Flipkart Marketing Dashboard</p>
+                            </div>
+                            <a href="#" class="item-folio__project-link" title="Project link">
+                                <i class="icon-link"></i>
+                            </a>
+                            <div class="item-folio__caption">
+                                <p>Getting a glimpse of what we can offer to our clients on the Flipkart Marketing dashboard.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-2"></div>
+
+                </div> 
+            </div> <!-- end col-full -->
+        </div> <!-- end works-content -->
+
+        <style>
+            .s-works {
+                padding: 50px 0;
+                background-color: #2c3e50;
+            }
+
+            .section-header {
+                margin-bottom: 30px;
+                text-align: center;
+            }
+
+            .subhead {
+                font-size: 1.5rem;
+                color: #ffffff;
+            }
+
+            .display-2--light {
+                font-size: 2.5rem;
+                color: #ffffff;
+            }
+
+            .works-content {
+                margin-top: 30px;
+            }
+
+            .masonry__brick {
+                margin-bottom: 30px;
+            }
+
+            .item-folio {
+                position: relative;
+                overflow: hidden;
+                border-radius: 8px;
+                background-color: #ffffff;
+                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            }
+
+            .item-folio__thumb img {
+                width: 100%;
+                height: auto;
+                display: block;
+            }
+
+            .item-folio__text {
+                padding: 15px;
+                text-align: center;
+            }
+
+            .item-folio__title {
+                font-size: 1.25rem;
+                margin-bottom: 10px;
+                color: #333;
+            }
+
+            .item-folio__cat {
+                font-size: 1rem;
+                color: #777;
+            }
+
+            .item-folio__project-link {
+                position: absolute;
+                top: 15px;
+                right: 15px;
+                color: #333;
+                font-size: 1.25rem;
+                transition: color 0.3s;
+            }
+
+                .item-folio__project-link:hover {
+                    color: #007bff;
+                }
+
+            .item-folio__caption {
+                padding: 15px;
+                text-align: center;
+                background-color: #f8f8f8;
+            }
+        </style>
+    </section>
+
+
+    <!--<div id="portfolio" class="our-portfolio section">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-5">
+                    <div class="section-heading wow fadeInLeft" data-wow-duration="1s" data-wow-delay="0.3s">
+                        <h6>Our Portofolio</h6>
+                        <h2>Discover Our Recent <em>Projects</em> And <span>Showcases</span></h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="container-fluid wow fadeIn" data-wow-duration="1s" data-wow-delay="0.7s">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="loop owl-carousel">
+                        <div class="item">
+                            <div class="portfolio-item">
+                                <div class="thumb">
+                                    <img src="portfolio-01.jpg" alt="">
+                                    <div class="hover-content">
+                                        <div class="inner-content">
+                                            <a href="#"><h4>Awesome Project 101</h4></a>
+                                            <span>Marketing</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="portfolio-item">
+                                <div class="thumb">
+                                    <img src="portfolio-04.jpg" alt="">
+                                    <div class="hover-content">
+                                        <div class="inner-content">
+                                            <a href="#"><h4>Awesome Project 102</h4></a>
+                                            <span>Branding</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="item">
+                            <div class="portfolio-item">
+                                <div class="thumb">
+                                    <img src="portfolio-02.jpg" alt="">
+                                    <div class="hover-content">
+                                        <div class="inner-content">
+                                            <a href="#"><h4>Awesome Project 103</h4></a>
+                                            <span>Consulting</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="portfolio-item">
+                                <div class="thumb">
+                                    <img src="portfolio-05.jpg" alt="">
+                                    <div class="hover-content">
+                                        <div class="inner-content">
+                                            <a href="#"><h4>Awesome Project 104</h4></a>
+                                            <span>Artwork</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="item">
+                            <div class="portfolio-item">
+                                <div class="thumb">
+                                    <img src="portfolio-03.jpg" alt="">
+                                    <div class="hover-content">
+                                        <div class="inner-content">
+                                            <a href="#"><h4>Awesome Project 105</h4></a>
+                                            <span>Branding</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="portfolio-item">
+                                <div class="thumb">
+                                    <img src="portfolio-06.jpg" alt="">
+                                    <div class="hover-content">
+                                        <div class="inner-content">
+                                            <a href="#"><h4>Awesome Project 106</h4></a>
+                                            <span>Artwork</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="item">
+                            <div class="portfolio-item">
+                                <div class="thumb">
+                                    <img src="portfolio-04.jpg" alt="">
+                                    <div class="hover-content">
+                                        <div class="inner-content">
+                                            <a href="#"><h4>Awesome Project 107</h4></a>
+                                            <span>Creative</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="portfolio-item">
+                                <div class="thumb">
+                                    <img src="portfolio-01.jpg" alt="">
+                                    <div class="hover-content">
+                                        <div class="inner-content">
+                                            <a href="#"><h4>Awesome Project 108</h4></a>
+                                            <span>Consulting</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>-->
+
+    <div id="contact" class="contact-us section s-contact">
+
+        <!--<div class="contact__line"></div>-->
+        <!--<div class="row section-header" data-aos="fade-up">
+            <div class="col-full">
+                <h3 class="subhead">Contact Us</h3>
+                <h1 class="display-2 display-2--light">Reach out for a new project or just say hello</h1>
+
+
+                <h1 class="mt-5">Click here to Contact us</h1>
+                <button class="btn btn-primary mt-3" onclick="window.open('https://docs.google.com/forms/d/e/1FAIpQLScEGoyq-BDCoieWYv3mXCgxkkGP02dcC1MxBEHU8MTHuB0OHQ/viewform', '_blank')">Contact us</button>
+
+            </div>
+        </div>-->
+        <div class="row section-header" data-aos="fade-up">
+            <div class="col-full">
+                <h3 class="subhead">Contact Us</h3>
+                <h1 class="display-2 display-2--light">Reach out for a new project or just say hello</h1>
+
+                <div class="contact-container mt-5">
+                    <h1>Click here to Contact us</h1>
+                    <button class="btn btn-primary mt-3" onclick="window.open('https://docs.google.com/forms/d/e/1FAIpQLScEGoyq-BDCoieWYv3mXCgxkkGP02dcC1MxBEHU8MTHuB0OHQ/viewform', '_blank')">Contact us</button>
+                </div>
+            </div>
+        </div>
+
+        <style>
+            .section-header {
+                text-align: center;
+                padding: 50px;
+                background: linear-gradient(135deg, #a2c2e6, #e0f0ff); /* Light blue gradient */
+                border-radius: 20%; /* Border radius */
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Box shadow */
+            }
+
+            .contact-container {
+                background: white;
+                padding: 20px;
+                border-radius: 20%; /* Border radius */
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Box shadow */
+                display: inline-block;
+            }
+
+            .btn-primary {
+                background-color: #007bff; /* Primary button color */
+                border: none;
+                color: white;
+                padding: 10px 20px;
+                border-radius: 20%; /* Border radius */
+                font-size: 16px;
+                cursor: pointer;
+                transition: background-color 0.3s;
+            }
+
+                .btn-primary:hover {
+                    background-color: #0056b3; /* Darker color on hover */
+                }
+        </style>
+        <!--<div class="container">
+            <div class="row">
+                <div class="col-lg-12 wow fadeInUp" data-wow-duration="0.5s" data-wow-delay="0.25s">
+                    <form id="contact" action="" method="post">
+                        <div class="row">
+                            <div class="col-lg-6 offset-lg-3">
+                                <div class="section-heading">
+                                    <h6>Contact Us</h6>
+                                    <h2>Fill Out The Form Below To <span>Get</span> In <em>Touch</em> With Us</h2>
+                                </div>
+                            </div>
+                            <div class="col-lg-9">
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <fieldset>
+                                            <input type="name" name="name" id="name" placeholder="Name" autocomplete="on" required>
+                                        </fieldset>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <fieldset>
+                                            <input type="surname" name="surname" id="surname" placeholder="Surname" autocomplete="on" required>
+                                        </fieldset>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <fieldset>
+                                            <input type="text" name="email" id="email" pattern="[^ @]*@[^ @]*" placeholder="Your Email" required="">
+                                        </fieldset>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <fieldset>
+                                            <input type="subject" name="subject" id="subject" placeholder="Subject" autocomplete="on">
+                                        </fieldset>
+                                    </div>
+                                    <div class="col-lg-12">
+                                        <fieldset>
+                                            <textarea name="message" type="text" class="form-control" id="message" placeholder="Message" required=""></textarea>
+                                        </fieldset>
+                                    </div>
+                                    <div class="col-lg-12">
+                                        <fieldset>
+                                            <button type="submit" id="form-submit" class="main-button ">Send Message Now</button>
+                                        </fieldset>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-3">
+                                <div class="contact-info">
+                                    <ul>
+                                        <li>
+                                            <div class="icon">
+                                                <img src="contact-icon-01.png" alt="email icon">
+                                            </div>
+                                            <a href="#">info@company.com</a>
+                                        </li>
+                                        <li>
+                                            <div class="icon">
+                                                <img src="contact-icon-02.png" alt="phone">
+                                            </div>
+                                            <a href="#">+001-002-0034</a>
+                                        </li>
+                                        <li>
+                                            <div class="icon">
+                                                <img src="contact-icon-03.png" alt="location">
+                                            </div>
+                                            <a href="#">26th Street, Digital Villa</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>-->
+    </div>
+
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <p>
+                        Copyright © 2015 ADplication. All Rights Reserved.
+
+                        <!--<br>Web Designed by <a rel="nofollow" href="https://templatemo.com" title="free CSS templates">TemplateMo</a>-->
+                    </p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="jquery.min.js"></script>
+    <script src="bootstrap.bundle.min.js"></script>
+    <script src="owl-carousel.js"></script>
+    <script src="animation.js"></script>
+    <script src="imagesloaded.js"></script>
+    <script src="custom.js"></script>
+
+</body>
+</html>
